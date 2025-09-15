@@ -82,7 +82,7 @@ def jugar():
 
         # Si tiene al menos 2 llaves puede intentar forzar la puerta
         if estado['llaves'] >= 2 and estado['vidas'] > 0:  # Uso de AND
-            print("Tienes varias llaves. ¿Intentar forzar la puerta arriesgando una vida? (s/n)")
+            print("Tienes varias llaves. ¿Intentar forzar la puerta arriesgando una vida? (s/n)\n ⚠️ s para si, n para no⚠️")
             intento = input().strip().lower()  # Pedimos decisión
             if intento == 's' and estado['vidas'] > 0:  # Uso de AND
                 if random.random() < 0.5:  # 50% éxito
@@ -96,7 +96,7 @@ def jugar():
 
         # Si ya tiene 3 llaves puede intentar abrir la sala del tesoro
         if estado['llaves'] >= 3 and estado['vidas'] > 0:  # Uso de AND
-            print("¿Deseas intentar abrir la sala del tesoro ahora? (s/n)")
+            print("¿Deseas intentar abrir la sala del tesoro ahora? (s/n)\n ⚠️ s para si, n para no⚠️")
             if input().strip().lower() == 's':  # Si responde que sí
                 break  # Rompemos el while para ir a la sala
 
