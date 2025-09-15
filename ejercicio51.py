@@ -1,109 +1,113 @@
-import random  # para decisiones aleatorias y mecánicas simples
+import random  # Importamos la librería random para generar decisiones aleatorias
 
 def mostrar_intro():
-    # Presentación breve del juego
-    print("=== AVENTURA: La Fortaleza ===")
-    print("Tu objetivo: llegar a la sala del tesoro evitando trampas y llegando con al menos 3 llaves.")
-    print("En cada etapa puedes elegir una acción. Usa números para seleccionar opciones.")
+    # Función que muestra la introducción del juego
+    print("=== AVENTURA: La Fortaleza ===")  # Título del juego
+    print("Tu objetivo: llegar a la sala del tesoro evitando trampas y llegando con al menos 3 llaves.")  # Explicación del objetivo
+    print("En cada etapa puedes elegir una acción. Usa números para seleccionar opciones.")  # Instrucciones de juego
 
 def elegir_ruta():
-    # El jugador elige entre dos rutas: segura o arriesgada
-    print("\nElige una ruta:")
-    print("1) Ruta segura (menos eventos, pero menos recompensas)")
-    print("2) Ruta arriesgada (más eventos, más recompensas)")
-    while True:
-        opt = input("Tu elección (1/2): ").strip()
-        if opt in ('1','2'):
-            return opt
-        print("Entrada no válida, intenta de nuevo.")
+    # Función que pide al jugador elegir entre dos rutas posibles
+    print("\nElige una ruta:")  # Texto de selección
+    print("1) Ruta segura (menos eventos, pero menos recompensas)")  # Opción 1
+    print("2) Ruta arriesgada (más eventos, más recompensas)")  # Opción 2
+    while True:  # Bucle hasta que elija bien
+        opt = input("Tu elección (1/2): ").strip()  # Pedimos entrada y eliminamos espacios
+        if opt in ('1','2'):  # Validamos que sea '1' o '2'
+            return opt  # Devolvemos la elección válida
+        print("Entrada no válida, intenta de nuevo.")  # Mensaje de error
 
 def evento(ruta, estado):
-    # Genera un evento según ruta: devuelve cambios en estado
-    # Estado es un diccionario con llaves: 'vidas', 'llaves', 'oro'
-    if ruta == '1':
-        # Ruta segura: mayor probabilidad de encontrar oro o nada
-        roll = random.random()
-        if roll < 0.1:
+    # Función que genera un evento según la ruta elegida
+    # El parámetro estado es un diccionario con 'vidas', 'llaves' y 'oro'
+    if ruta == '1':  # Si eligió ruta segura
+        roll = random.random()  # Generamos un número aleatorio entre 0 y 1
+        if roll < 0.1:  # 10% de probabilidad de trampa
             print("Encontraste una trampa leve! Pierdes 1 vida.")
-            estado['vidas'] -= 1
-        elif roll < 0.5:
+            estado['vidas'] -= 1  # Restamos 1 vida
+        elif roll < 0.5:  # 40% de probabilidad de encontrar oro
             print("Encontraste 1 oro.")
-            estado['oro'] += 1
-        else:
+            estado['oro'] += 1  # Sumamos 1 oro
+        else:  # 50% de probabilidad de nada
             print("Camino tranquilo...")
-    else:
-        # Ruta arriesgada: más probabilidades de llaves o trampas
-        roll = random.random()
-        if roll < 0.2:
+    else:  # Si eligió ruta arriesgada
+        roll = random.random()  # Número aleatorio entre 0 y 1
+        if roll < 0.2:  # 20% de trampa peligrosa
             print("Trampa peligrosa! Pierdes 1 vida.")
             estado['vidas'] -= 1
-        elif roll < 0.5:
+        elif roll < 0.5:  # 30% de probabilidad de llave
             print("Encontraste una llave dorada!")
             estado['llaves'] += 1
-        else:
+        else:  # 50% de probabilidad de oro
             print("Encontraste algo de oro.")
             estado['oro'] += 1
-    return estado
+    return estado  # Devolvemos el estado actualizado
 
 def sala_tesoro(estado):
-    # Verifica si el jugador puede abrir la sala del tesoro
-    print("\nHas llegado a la sala del tesoro...")
-    # Condición para abrir la sala: tener >=3 llaves Y al menos 1 vida
-    if estado['llaves'] >= 3 and estado['vidas'] > 0:
+    # Función que evalúa si el jugador puede ganar
+    print("\nHas llegado a la sala del tesoro...")  # Mensaje de llegada
+    # Condición de victoria: tener al menos 3 llaves y al menos 1 vida
+    if estado['llaves'] >= 3 and estado['vidas'] > 0:  # Uso de AND
         print("¡Con tus llaves logras abrir el cofre y ganar el juego!")
         return True
-    # Si no tiene llaves suficientes OR no tiene vidas, se producen consecuencias
-    if estado['llaves'] < 3 or estado['vidas'] <= 0:
-        # Usamos or/not para comprobar situaciones: si no tiene llaves OR no vive, pierde.
-        if not (estado['llaves'] >= 3) or estado['vidas'] <= 0:
+    # Si no cumple, mostramos mensaje de fracaso
+    if estado['llaves'] < 3 or estado['vidas'] <= 0:  # Uso de OR
+        # Aquí usamos NOT para invertir la condición de victoria
+        if not (estado['llaves'] >= 3 and estado['vidas'] > 0):  # Uso de NOT
             print("No puedes abrir el cofre. Te retiran de la fortaleza...")
             return False
-    return False
+    return False  # Si no cumple condiciones, devuelve False
 
 def jugar():
-    mostrar_intro()  # mostramos introducción
-    # Estado inicial del jugador
-    estado = {'vidas': 3, 'llaves': 0, 'oro': 0}
-    rondas = 0  # contador de rondas recorridas
-    # El bucle principal: el jugador decide avanzar hasta 10 rondas o morir
-    while rondas < 10 and estado['vidas'] > 0:
-        rondas += 1  # incrementamos rondas
-        print(f"\n--- Ronda {rondas} ---")
-        ruta = elegir_ruta()  # jugador elige ruta
-        # Realizamos de 1 a 3 eventos en la ruta elegida (uso de for)
-        eventos = random.randint(1,3)
-        for _ in range(eventos):
-            estado = evento(ruta, estado)  # aplicamos evento y actualizamos estado
-            # Si el jugador pierde todas las vidas salimos del bucle inmediatamente
-            if estado['vidas'] <= 0:
+    # Función principal que ejecuta el juego completo
+    mostrar_intro()  # Llamamos la introducción
+    estado = {'vidas': 3, 'llaves': 0, 'oro': 0}  # Creamos el estado inicial
+    rondas = 0  # Contador de rondas
+
+    # Bucle principal: máximo 10 rondas y solo si tiene vidas
+    while rondas < 10 and estado['vidas'] > 0:  # Uso de AND
+        rondas += 1  # Aumentamos contador de rondas
+        print(f"\n--- Ronda {rondas} ---")  # Mostramos número de ronda
+        ruta = elegir_ruta()  # El jugador elige la ruta
+
+        # Advertencia si está en peligro (pocas vidas o sin recursos)
+        if estado['vidas'] <= 1 or (not estado['llaves'] and not estado['oro']):  # Uso de OR y NOT combinados
+            print("⚠️ Consejo: Estás en peligro, juega con cuidado.")
+
+        # Generamos de 1 a 3 eventos según la ruta
+        for _ in range(random.randint(1, 3)):  # Bucle FOR
+            estado = evento(ruta, estado)  # Aplicamos evento
+            if estado['vidas'] <= 0:  # Si pierde todas las vidas
                 print("Has perdido todas tus vidas!")
-                break
-        # Decisión adicional: si tienes 2 o más llaves puedes intentar forzar la entrada (riesgoso)
-        if estado['llaves'] >= 2:
+                break  # Salimos del for
+
+        # Si tiene al menos 2 llaves puede intentar forzar la puerta
+        if estado['llaves'] >= 2 and estado['vidas'] > 0:  # Uso de AND
             print("Tienes varias llaves. ¿Intentar forzar la puerta arriesgando una vida? (s/n)")
-            intento = input().strip().lower()
-            # Ejemplo de uso de operadores lógicos: si dice 's' y tiene >0 vidas -> riesgo
-            if intento == 's' and estado['vidas'] > 0:
-                # Riesgo: 50% éxito
-                if random.random() < 0.5:
+            intento = input().strip().lower()  # Pedimos decisión
+            if intento == 's' and estado['vidas'] > 0:  # Uso de AND
+                if random.random() < 0.5:  # 50% éxito
                     print("El intento funcionó! Ganas una llave adicional.")
                     estado['llaves'] += 1
                 else:
                     print("Fallaste y perdiste 1 vida.")
                     estado['vidas'] -= 1
-        # Mostrar estado actual después de la ronda
-        print("Estado actual:", estado)
-        # Si el jugador ya tiene 3 o más llaves, preguntar si quiere ir a la sala del tesoro
-        if estado['llaves'] >= 3:
-            print("¿Deseas intentar abrir la sala del tesoro ahora? (s/n)")
-            if input().strip().lower() == 's':
-                break  # salimos del bucle principal para ir a la sala
-    # Al salir del bucle principal, comprobamos la sala del tesoro
-    exito = sala_tesoro(estado)
-    if exito:
-        print("¡Felicidades, victoria!")
-    else:
-        print("Fin del juego. Mejor suerte la próxima.")
 
-if __name__ == '__main__':
-    jugar()  # iniciamos el juego si ejecutamos el script directamente
+        print("Estado actual:", estado)  # Mostramos estado actual
+
+        # Si ya tiene 3 llaves puede intentar abrir la sala del tesoro
+        if estado['llaves'] >= 3 and estado['vidas'] > 0:  # Uso de AND
+            print("¿Deseas intentar abrir la sala del tesoro ahora? (s/n)")
+            if input().strip().lower() == 's':  # Si responde que sí
+                break  # Rompemos el while para ir a la sala
+
+    # Comprobamos si gana o pierde al final
+    exito = sala_tesoro(estado)  # Llamamos la función de victoria
+    if exito:  # Si devuelve True
+        print("¡Felicidades, victoria!")  # Mensaje de victoria
+    else:  # Si devuelve False
+        print("Fin del juego. Mejor suerte la próxima.")  # Mensaje de derrota
+
+# Punto de entrada principal del programa
+if __name__ == '__main__':  # Si ejecutamos directamente este archivo
+    jugar()  # Llamamos la función principal
