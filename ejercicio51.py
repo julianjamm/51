@@ -2,8 +2,7 @@ import random  # Importamos la librería random para generar decisiones aleatori
 
 def mostrar_intro():
     # Función que muestra la introducción del juego
-    print("=== AVENTURA: La Fortaleza ===")  # Título del juego
-    print("Tu objetivo: llegar a la sala del tesoro evitando trampas y llegando con al menos 3 llaves.")  # Explicación del objetivo
+    print("=== AVENTURA: La Fortaleza ===\nTu objetivo: llegar a la sala del tesoro evitando trampas y llegando con al menos 3 llaves.")  # Título del juego Explicación del objetivo
     print("En cada etapa puedes elegir una acción. Usa números para seleccionar opciones.")  # Instrucciones de juego
 
 def elegir_ruta():
@@ -71,7 +70,7 @@ def jugar():
         ruta = elegir_ruta()  # El jugador elige la ruta
 
         # Advertencia si está en peligro (pocas vidas o sin recursos)
-        if estado['vidas'] <= 1 or (not estado['llaves'] and not estado['oro']):  # Uso de OR y NOT combinados
+        if estado['vidas'] <= 1 or (not estado['llaves'] and not estado['oro']):  # Uso de OR para peligro y dentro uso not y and not para recursos
             print("⚠️ Consejo: Estás en peligro, juega con cuidado.")
 
         # Generamos de 1 a 3 eventos según la ruta
