@@ -1,0 +1,3 @@
+nombres_personas = ["Carlos", "Lucía", "María", "Pedro", "Ana"]#lista
+print("Estos son algunos nombres que me gustan:\nLista completa:", nombres_personas, "\nTotal de nombres:", len(nombres_personas))  # len() cuenta los elementos
+print("Nombres individuales:\nPrimer nombre:", nombres_personas[0], "\nSegundo nombre:", nombres_personas[1], "\npenúltimo nombre:", nombres_personas[-2], "\núltimo nombre:", nombres_personas[-1])#imprime valores individuales
